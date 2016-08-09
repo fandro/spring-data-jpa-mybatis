@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的 -->
+<mapper namespace="com.yougou.dao.mapper.CategoryMapper">
+
+    <cache />
+
+    <sql id="baseColumns">
+        id,
+        category_name
+    </sql>
+    <!--
+    flushCache="true" 将其设置为 true，不论语句什么时候被调用，都会导致缓存被清空。默认值： false。
+    statementType="PREPARED"  STATEMENT,PREPARED 或 CALLABLE 的一种。这会让 MyBatis使用选择使用 Statement， PreparedStatement 或CallableStatement。默认值： PREPARED。
+    keyProperty=""  （仅对 insert有用）标记一个属性， MyBatis 会通过 getGeneratedKeys或者通过 insert 语句的 selectKey 子元素设置它的值。默认：不设置。
+    useGeneratedKeys=""  （ 仅 对 insert 有 用 ） 这 会 告 诉 MyBatis 使 用 JDBC 的getGeneratedKeys 方法来取出由数据（比如：像 MySQL 和 SQLServer 这样的数据库管理系统的自动递增字段）内部生成的主键。默认值： false。
+    -->
+    <insert id="insertCategory" parameterType="Category">
+        INSERT INTO category
+        (id,
+        category_name)
+        VALUES
+        (#{id},#{categoryName});
+    </insert>
+
+
+    <update id="updateCategory" parameterType="Category">
+        UPDATE Category SET
+        category_name = #{categoryName},
+        WHERE id = #{id}
+    </update>
+
+    <!-- 在select标签中编写查询的SQL语句， 设置select标签的id属性为getCategoryById，id属性值必须是唯一的，不能够重复
+            使用parameterType属性指明查询时使用的参数类型，
+            resultType属性指明查询返回的结果集类型
+            resultType="Category" 就表示将查询结果封装成一个com.yougou.model.Category类的对象返回,Category使用的是com.yougou.model.Category别名(短名)
+            resultMap=”personResultMap” 命名引用外部的resultMap。返回map是MyBatis最具力量的特性，对其有一个很好的理解的话，许多复杂映射的情形就能被解决了。使用 resultMap 或 resultType，但不能同时使用。
+            flushCache=”false” 将其设置为true，不论语句什么时候被调用，都会导致缓存被清空。默认值： false。
+            useCache=”true” 将其设置为 true，将会导致本条语句的结果被缓存。默认值： true。
+            fetchSize=”256” 这是暗示驱动程序每次批量返回的结果行数。默认不设置（驱动自行处理）。
+            -->
+    <select id="getCategoryById" parameterType="int" resultType="Category">
+        select  <include refid="baseColumns"/>
+        from Category where id=#{id}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	">
+
+	<description>Spring JPA</description>
+
+	<!-- 配置 JPA 的 EntityManagerFactory -->
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<!-- 数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"></bean>
+		</property>
+		<property name="packagesToScan" value="com.yougou.model"></property>
+		<property name="jpaProperties">
+			<props>
+				<!-- 基本属性 -->
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL57InnoDBDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<!-- 生成的数据表的列的映射策略 -->
+				<prop key="hiberante.ejb.naming_startegy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
+				<!-- 二级缓存相关 -->
+				<!--
+				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+				<prop key="net.sf.ehcache.configurationResourceName">ehcache-hibernate.xml</prop>
+				-->
+			</props>
+
+		</property>
+	</bean>
+
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManagerJPA" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory"></property>
+	</bean>
+
+	<!-- 配置注解的事物-->
+	<tx:annotation-driven transaction-manager="transactionManagerJPA"></tx:annotation-driven>
+
+	<!-- 配置 SpringData -->
+	<!-- 加入  jpa 的命名空间 -->
+	<!-- base-package: 扫描base-package下所有继承于Repository<T,ID>的接口 -->
+	<jpa:repositories base-package="com.yougou.dao.jpa"
+					  factory-class="com.yougou.dao.jpa.base.BaseDaoRepositoryFactoryBean"
+					  entity-manager-factory-ref="entityManagerFactory"
+					  transaction-manager-ref="transactionManagerJPA"/>
+
+
+	<!-- 定义aspectj -->
+	<!--<aop:aspectj-autoproxy proxy-target-class="true"/>-->
+
+	<!-- 定义使用事务的方法 -->
+	<!--<tx:advice id="txAdviceJPA" transaction-manager="transactionManagerJPA">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="edit*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>-->
+	<!-- 定义一个切入点，使事务在它的切入点内有效 -->
+	<!--<aop:config>
+		<aop:pointcut expression="execution(* com.yaobai.platform.service.*.*Service.*(..))"
+					  id="pointcut" />
+		<aop:advisor pointcut-ref="pointcut" advice-ref="txAdviceJPA" />
+	</aop:config>-->
+</beans>
