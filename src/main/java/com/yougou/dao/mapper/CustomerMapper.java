@@ -1,13 +1,14 @@
 package com.yougou.dao.mapper;
 
-import com.yougou.model.Customer;
+import com.yougou.domain.Customer;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 /**
  * Created by fuwb on 16/8/9.
- * 定义sql映射的接口，使用注解指明方法要执行的SQL
+ * 通过mybatis注解标注sql,定义sql映射的接口，使用注解指明方法要执行的SQL
+ * 使用注解时也可以使用xml映射文件
  */
 public interface CustomerMapper {
 

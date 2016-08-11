@@ -20,15 +20,17 @@
 		<property name="jpaVendorAdapter">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"></bean>
 		</property>
-		<property name="packagesToScan" value="com.yougou.model"></property>
+		<!-- entity package-->
+		<property name="packagesToScan" value="com.yougou.domain"></property>
 		<property name="jpaProperties">
 			<props>
 				<!-- 基本属性 -->
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL57InnoDBDialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.format_sql">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
 				<!-- 生成的数据表的列的映射策略 -->
+				<!--<prop key="hiberante.ejb.naming_startegy">${hiberante.ejb.namingStartegy}</prop>-->
 				<prop key="hiberante.ejb.naming_startegy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
 				<!-- 二级缓存相关 -->
 				<!--
@@ -36,7 +38,6 @@
 				<prop key="net.sf.ehcache.configurationResourceName">ehcache-hibernate.xml</prop>
 				-->
 			</props>
-
 		</property>
 	</bean>
 
@@ -54,7 +55,10 @@
 	<jpa:repositories base-package="com.yougou.dao.jpa"
 					  factory-class="com.yougou.dao.jpa.base.BaseDaoRepositoryFactoryBean"
 					  entity-manager-factory-ref="entityManagerFactory"
-					  transaction-manager-ref="transactionManagerJPA"/>
+					  transaction-manager-ref="transactionManagerJPA">
+        <!-- 排除 BaseDao接口,或者在该接口上标注@NoRepositoryBean-->
+		<!--<exclude-filter type="assignable" expression="com.yougou.dao.jpa.base.BaseDao"/>-->
+	</jpa:repositories>
 
 
 	<!-- 定义aspectj -->

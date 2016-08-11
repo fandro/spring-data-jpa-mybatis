@@ -1,4 +1,4 @@
-package com.yougou.model;
+package com.yougou.domain;
 
 import java.util.HashSet;
 import java.util.Set;

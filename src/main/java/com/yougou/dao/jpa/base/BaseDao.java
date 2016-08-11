@@ -7,6 +7,16 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+/**
+ * <p>自定义基础接口</p>
+ * <p>该接口不需要注册成RepositoryBean,通过@NoRepositoryBean指定</p>
+ * <p>或者配置文件中指定</p>
+ * <p>
+ * jpa:repositories项中添加exclude-filter type="assignable" expression="com.yougou.dao.jpa.base.BaseDao"
+ * </p>
+ * @param <T>
+ * @param <ID>
+ */
 @NoRepositoryBean
 public interface BaseDao<T, ID extends Serializable> extends PagingAndSortingRepository<T, ID>,
 		JpaSpecificationExecutor<T> {

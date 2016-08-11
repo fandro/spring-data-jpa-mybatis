@@ -1,0 +1,2 @@
+INSERT INTO jpa.category (category_name, created_by_user, creation_time, modified_by_user, modify_action_time) VALUES ('china', 'fuwb', '2016-08-10 17:59:12.458000', 'fuwb', '2016-08-10 17:59:25.898000');
+INSERT INTO jpa.category (category_name, created_by_user, creation_time, modified_by_user, modify_action_time) VALUES ('canada', 'zhangpw', '2016-08-10 18:15:47.375000', 'zhangp', '2016-08-10 18:15:56.052000');

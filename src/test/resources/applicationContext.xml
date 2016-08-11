@@ -13,6 +13,9 @@
 
 	<description>Spring启动配置引导，根据环境适配加载相关内容</description>
 
+    <!-- 加载资源文件 -->
+	<context:property-placeholder location="classpath:application.properties"/>
+
 	<!--开启注解 -->
 	<context:annotation-config />
 
@@ -24,6 +27,9 @@
 
 	<!-- 自动调度需要扫描的包 -->
 	<task:annotation-driven/>
+
+	<!--扫描缓存注解-->
+	<!--<cache:annotation-driven/>-->
 
 	<!-- database 数据源 -->
 	<import resource="classpath:applicationContext-db.xml" />

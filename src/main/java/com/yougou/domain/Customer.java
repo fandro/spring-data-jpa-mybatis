@@ -1,4 +1,4 @@
-package com.yougou.model;
+package com.yougou.domain;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -10,7 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -19,8 +18,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-@NamedQuery(name="testNamedQuery", query="FROM Customer c WHERE c.id = ?")
-@Cacheable(true)
 @Table(name="cutomer")
 @Entity
 public class Customer {
