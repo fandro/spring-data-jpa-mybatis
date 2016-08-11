@@ -1,13 +1,7 @@
 package com.yougou.dao.jpa;
 
-import com.yougou.dao.jpa.base.BaseDao;
+import com.yougou.dao.jpa.base.BaseRepository;
 import com.yougou.domain.Customer;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * 1. Repository 是一个空接口. 即是一个标记接口
@@ -25,13 +19,13 @@ import java.util.List;
  * ------------------------
  * 自定义实现Repository
  * 1.定义一个接口CustomerDaoCustom,添加自定义方法
- * 2.定义一个类CustomerDaoImpl,实现CustomerDaoCustom接口,CustomerDaoImpl名称命名规则: CustomerDao + Impl
- * 3.CustomerDao 继承CustomerDaoCustom接口
+ * 2.定义一个类CustomerDaoImpl,实现CustomerDaoCustom接口,CustomerDaoImpl名称命名规则: CustomerRepository + Impl
+ * 3.CustomerRepository 继承CustomerDaoCustom接口
  * 通过以上步骤CustomerDao中就访问自定义方法了。
  */
 
 //@RepositoryDefinition(domainClass=Customer.class,idClass=Integer.class)
-public interface CustomerDao extends BaseDao<Customer,Integer> ,CustomerDaoCustom{
+public interface CustomerRepository extends BaseRepository<Customer,Integer>,CustomerDaoCustom{
    /* //根据 lastName 来获取对应的 Customer
     Customer getByLastName(String lastName);
 

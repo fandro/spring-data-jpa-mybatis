@@ -1,6 +1,6 @@
 package com.yougou;
 
-import com.yougou.dao.jpa.CategoryDao;
+import com.yougou.dao.jpa.CategoryRepository;
 import com.yougou.domain.Category;
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,7 +22,7 @@ import java.util.List;
 public class JpaTest {
 
     @Autowired
-    private CategoryDao categoryDao;
+    private CategoryRepository categoryDao;
 
     @Test
     public void getByCategoryName(){

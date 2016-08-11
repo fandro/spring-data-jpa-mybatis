@@ -1,6 +1,5 @@
 package com.yougou.dao.jpa;
 
-import com.yougou.dao.jpa.base.BaseDao;
 import com.yougou.domain.Customer;
 
 import java.util.List;

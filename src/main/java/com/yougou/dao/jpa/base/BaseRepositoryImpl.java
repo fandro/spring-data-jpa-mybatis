@@ -13,11 +13,11 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
-public class BaseDaoImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements BaseDao<T, ID> {
+public class BaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements BaseRepository<T, ID> {
 
 	private EntityManager entityManager;
 
-	public BaseDaoImpl(Class<T> domainClass, EntityManager em) {
+	public BaseRepositoryImpl(Class<T> domainClass, EntityManager em) {
 		super(domainClass, em);
 		entityManager = em;
 	}

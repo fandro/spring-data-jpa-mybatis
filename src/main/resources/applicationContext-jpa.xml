@@ -53,11 +53,11 @@
 	<!-- 加入  jpa 的命名空间 -->
 	<!-- base-package: 扫描base-package下所有继承于Repository<T,ID>的接口 -->
 	<jpa:repositories base-package="com.yougou.dao.jpa"
-					  factory-class="com.yougou.dao.jpa.base.BaseDaoRepositoryFactoryBean"
+					  factory-class="com.yougou.dao.jpa.base.BaseRepositoryFactoryBean"
 					  entity-manager-factory-ref="entityManagerFactory"
 					  transaction-manager-ref="transactionManagerJPA">
         <!-- 排除 BaseDao接口,或者在该接口上标注@NoRepositoryBean-->
-		<!--<exclude-filter type="assignable" expression="com.yougou.dao.jpa.base.BaseDao"/>-->
+		<!--<exclude-filter type="assignable" expression="com.yougou.dao.jpa.base.BaseRepositoryository"/>-->
 	</jpa:repositories>
 
 

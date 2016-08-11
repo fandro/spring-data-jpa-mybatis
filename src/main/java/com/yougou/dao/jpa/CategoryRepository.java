@@ -1,12 +1,8 @@
 package com.yougou.dao.jpa;
 
-import com.yougou.dao.jpa.base.BaseDao;
+import com.yougou.dao.jpa.base.BaseRepository;
 import com.yougou.domain.Category;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,7 +22,7 @@ import java.util.List;
  * 若需要使用级联属性, 则属性之间使用 _ 进行连接.
  */
 //@RepositoryDefinition(domainClass=Category.class,idClass=Integer.class)
-public interface CategoryDao extends BaseDao<Category, Integer>{
+public interface CategoryRepository extends BaseRepository<Category, Integer> {
 
     //根据 categoryName 来获取对应的 Person
     Category getByCategoryName(String categoryName);
