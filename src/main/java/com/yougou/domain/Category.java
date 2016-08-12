@@ -6,16 +6,11 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Table(name="category")
 @Entity
@@ -26,11 +21,11 @@ public class Category {
 
 	private String createdByUser;
 
-	private ZonedDateTime creationTime;
+	private Date creationTime;
 
 	private String modifiedByUser;
 
-	private ZonedDateTime modifyActionTime;
+	private Date modifyActionTime;
 
 	private Set<Item> items = new HashSet<Item>();
 
@@ -63,25 +58,26 @@ public class Category {
 	}
 
     @Column(name = "created_by_user", nullable = false)
-    @CreatedBy
+//    @CreatedBy
     public String getCreatedByUser() {
         return createdByUser;
+    }
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "creation_time", nullable = false)
+    @CreatedDate
+    public Date getCreationTime() {
+        return creationTime;
     }
 
     public void setCreatedByUser(String createdByUser) {
         this.createdByUser = createdByUser;
     }
 
-    @Column(name = "creation_time", nullable = false)
-    //@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
-    @CreatedDate
-    public ZonedDateTime getCreationTime() {
-        return creationTime;
-    }
-
-    public void setCreationTime(ZonedDateTime creationTime) {
+    public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
     }
+
 
     @Column(name = "modified_by_user", nullable = false)
     @LastModifiedBy
@@ -93,14 +89,14 @@ public class Category {
         this.modifiedByUser = modifiedByUser;
     }
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modify_action_time")
-    //@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
     @LastModifiedDate
-    public ZonedDateTime getModifyActionTime() {
+    public Date getModifyActionTime() {
         return modifyActionTime;
     }
 
-    public void setModifyActionTime(ZonedDateTime modifyActionTime) {
+    public void setModifyActionTime(Date modifyActionTime) {
         this.modifyActionTime = modifyActionTime;
     }
 }

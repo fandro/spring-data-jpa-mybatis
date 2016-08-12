@@ -18,7 +18,10 @@
 	<bean name="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
 		<!-- 指定 domain 路径,为Java类型命名一个短的别名,例如:com.yougou.domainn.Category 的别名是Category -->
-		<property name="typeAliases" value="com.yougou.domain"></property>
+		<property name="typeAliasesPackage" value="com.yougou.domain"></property>
+		<!--  指定单个类
+		<property name="typeAliases" value="com.yougou.domain."></property>-->
+
 		<!-- 指定mapper.xml路径 -->
 		<!--<property name="mapperLocations" value="classpath*:com/yougou/mappers/*.xml" />-->
 

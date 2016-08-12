@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc  http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/aop  http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+         http://www.springframework.org/schema/util
+          http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+	default-autowire="byName">
+
+	<!-- 自动扫描且只扫描@Controller -->
+	<context:component-scan base-package="com.yougou.member" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<mvc:annotation-driven />
+
+	<bean class="com.yougou.member.framework.base.DefaultHandlerExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="com.yougou.member.framework.base.MemberfriendlyException">
+					forward:/error.sc
+				</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 设置编码 -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/html;charset=UTF-8</value>
+							<value>text/json;charset=UTF-8</value>
+							<value>application/json;charset=UTF-8</value>
+						</list>
+					</property>
+					<property name="writeAcceptCharset" value="false" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+
+	<!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL -->
+	<mvc:default-servlet-handler />
+
+	<!-- 定义模板配置 -->
+	<bean id="freemarkerConfig" class="com.yougou.member.framework.base.CustomTagFreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/WEB-INF/ftl/" />
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="template_update_delay">0</prop>
+				<prop key="locale">zh_CN</prop>
+				<prop key="default_encoding">UTF-8</prop>
+			</props>
+		</property>
+		<!-- 全局变量部分 -->
+		<property name="freemarkerVariables">
+			<map>
+				<entry key="BasePath" value="" />
+				<entry key="xml_escape" value-ref="fmXmlEscape" />
+				<entry key="VERSION" value="1.0.0" />
+				<entry key="compress_single_line" value="false" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />
+
+	<bean id="ftlviewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" />
+		<property name="contentType" value="text/html;charset=UTF-8" />
+		<property name="cache" value="false" />
+		<property name="prefix" value="" />
+		<property name="suffix" value=".ftl" />
+	</bean>
+
+	<!-- 载入 WEB 上下文路径 -->
+	<!-- <bean id="webContextPath" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject">
+			<bean class="org.springframework.web.context.support.ServletContextFactoryBean" />
+		</property>
+		<property name="targetMethod">
+			<value>getContextPath</value>
+		</property>
+	</bean> -->
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- set the max upload size 10MB -->
+		<property name="maxUploadSize" value="10485760"/>
+		<property name="maxInMemorySize" value="4096"/>
+		<property name="defaultEncoding" value="UTF-8"/>
+		<property name="uploadTempDir" value="/upload/temp/"/>
+	</bean>
+
+	<!-- 配置fastjson支持
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html;charset=UTF-8</value>
+						<value>text/json;charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+				<property name="features">
+					<list>
+						<value>WriteMapNullValue</value>
+						<value>QuoteFieldNames</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>-->
+
+	<!-- 配置处理器拦截器 -->
+	<mvc:interceptors>
+		<!-- 更改语言环境时，一个'locale'的请求参数发送 -->
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+
+		<!-- 权限拦截 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*.sc" />
+			<mvc:exclude-mapping path="/**/logout.sc" />
+			<mvc:exclude-mapping path="/**/login.sc" />
+			<mvc:exclude-mapping path="/**/denied.sc" />
+			<mvc:exclude-mapping path="/member/job/**" />
+			<bean class="com.yougou.member.framework.base.PrivilegeInterceptor" />
+		</mvc:interceptor>
+
+	</mvc:interceptors>
+</beans>

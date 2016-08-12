@@ -34,8 +34,9 @@
 	<!-- database 数据源 -->
 	<import resource="classpath:applicationContext-db.xml" />
 
-	<!-- JPA 数据源 -->
+	<!-- JPA  -->
 	<import resource="classpath:applicationContext-jpa.xml" />
+	<import resource="classpath:applicationContext-mybatis.xml" />
 
 	<!-- other -->
 	<import resource="classpath:applicationContext-other.xml" />

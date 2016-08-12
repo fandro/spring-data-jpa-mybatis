@@ -2,7 +2,14 @@ package com.yougou.dao.jpa;
 
 import com.yougou.dao.jpa.base.BaseRepository;
 import com.yougou.domain.Category;
+import org.springframework.data.jpa.domain.AbstractPersistable;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import javax.persistence.metamodel.SingularAttribute;
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,13 +38,13 @@ public interface CategoryRepository extends BaseRepository<Category, Integer> {
     List<Category> getByCategoryNameStartingWithAndIdLessThan(String categoryName, Integer id);
 
     //WHERE CategoryName LIKE %? AND id < ?
-    /*List<Category> getByCategoryNameEndingWithAndIdLessThan(String CategoryName, Integer id);
+    List<Category> getByCategoryNameEndingWithAndIdLessThan(String categoryName, Integer id);
 
     //WHERE email IN (?, ?, ?) OR birth < ?
-    List<Category> getByEmailInAndBirthLessThan(List<String> emails, Date birth);
+    List<Category> getByCategoryNameInAndCreationTimeLessThan(List<String> categoryNames, Date creationTime);
 
     //WHERE a.id > ?
-    List<Category> getByAddress_IdGreaterThan(Integer id);
+    //List<Category> getByAddress_IdGreaterThan(Integer id);
 
     //查询 id 值最大的那个 Category
     //使用 @Query 注解可以自定义 JPQL 语句以实现更灵活的查询
@@ -45,20 +52,20 @@ public interface CategoryRepository extends BaseRepository<Category, Integer> {
     Category getMaxIdCategory();
 
     //为 @Query 注解传递参数的方式1: 使用占位符.
-    @Query("SELECT p FROM Category p WHERE p.CategoryName = ?1 AND p.email = ?2")
-    List<Category> testQueryAnnotationParams1(String CategoryName, String email);
+    @Query("SELECT p FROM Category p WHERE p.categoryName = ?1 AND p.createdByUser = ?2")
+    List<Category> testQueryAnnotationParams1(String categoryName, String createdByUser);
 
     //为 @Query 注解传递参数的方式1: 命名参数的方式.
-    @Query("SELECT p FROM Category p WHERE p.CategoryName = :CategoryName AND p.email = :email")
-    List<Category> testQueryAnnotationParams2(@Param("email") String email, @Param("CategoryName") String CategoryName);
+    @Query("SELECT p FROM Category p WHERE p.categoryName = :categoryName AND p.createdByUser = :createdByUser")
+    List<Category> testQueryAnnotationParams2(@Param("createdByUser") String createdByUser, @Param("categoryName") String categoryName);
 
     //SpringData 允许在占位符上添加 %%.
-    @Query("SELECT p FROM Category p WHERE p.CategoryName LIKE %?1% OR p.email LIKE %?2%")
-    List<Category> testQueryAnnotationLikeParam(String CategoryName, String email);
+    @Query("SELECT p FROM Category p WHERE p.categoryName LIKE %?1% OR p.createdByUser LIKE %?2%")
+    List<Category> testQueryAnnotationLikeParam(String categoryName, String createdByUser);
 
     //SpringData 允许在占位符上添加 %%.
-    @Query("SELECT p FROM Category p WHERE p.CategoryName LIKE %:CategoryName% OR p.email LIKE %:email%")
-    List<Category> testQueryAnnotationLikeParam2(@Param("email") String email, @Param("CategoryName") String CategoryName);
+    @Query("SELECT p FROM Category p WHERE p.categoryName LIKE %:categoryName% OR p.createdByUser LIKE %:createdByUser%")
+    List<Category> testQueryAnnotationLikeParam2(@Param("createdByUser") String createdByUser, @Param("categoryName") String categoryName);
 
     //设置 nativeQuery=true 即可以使用原生的 SQL 查询
     @Query(value="SELECT count(id) FROM category", nativeQuery=true)
@@ -69,7 +76,7 @@ public interface CategoryRepository extends BaseRepository<Category, Integer> {
     //UPDATE 或 DELETE 操作需要使用事务, 此时需要定义 Service 层. 在 Service 层的方法上添加事务操作.
     //默认情况下, SpringData 的每个方法上有事务, 但都是一个只读事务. 他们不能完成修改操作!
     @Modifying
-    @Query("UPDATE Category p SET p.email = :email WHERE id = :id")
-    void updateCategoryEmail(@Param("id") Integer id, @Param("email") String email);*/
+    @Query("UPDATE Category p SET p.categoryName = :categoryName WHERE id = :id")
+    void updateCategory(@Param("id") Integer id, @Param("categoryName") String categoryName);
 
 }
