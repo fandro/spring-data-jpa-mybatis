@@ -10,7 +10,7 @@ import java.util.List;
  *
  * Created by fuwb on 16/8/10.
  */
-public interface CustomerDaoCustom{
+public interface CustomerRepositoryCustom {
 
     // 自定义方法
     public Customer doCustomMethod();

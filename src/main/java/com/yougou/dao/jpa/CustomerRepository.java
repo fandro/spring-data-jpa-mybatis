@@ -18,13 +18,13 @@ import com.yougou.domain.Customer;
  * 若需要使用级联属性, 则属性之间使用 _ 进行连接.
  * ------------------------
  * 自定义实现Repository
- * 1.定义一个接口CustomerDaoCustom,添加自定义方法
- * 2.定义一个类CustomerDaoImpl,实现CustomerDaoCustom接口,CustomerDaoImpl名称命名规则: CustomerRepository + Impl
- * 3.CustomerRepository 继承CustomerDaoCustom接口
+ * 1.定义一个接口CustomerRepositoryCustom,添加自定义方法
+ * 2.定义一个实现类CustomerRepositoryImpl,实现CustomerRepositoryCustom接口,CustomerRepositoryImpl名称命名规则: 接口名 + Impl
+ * 3.CustomerRepository 继承CustomerRepositoryCustom接口
  * 通过以上步骤CustomerDao中就访问自定义方法了。
  */
 
 //@RepositoryDefinition(domainClass=Customer.class,idClass=Integer.class)
-public interface CustomerRepository extends BaseRepository<Customer,Integer>, CustomerDaoCustom{
+public interface CustomerRepository extends BaseRepository<Customer,Integer>, CustomerRepositoryCustom {
 
 }

@@ -7,10 +7,10 @@ import javax.persistence.PersistenceContext;
 
 /**
  * 1.名称规则: CustomerRepository+Impl
- * 2.实现自定义接口CustomerDaoCustom
+ * 2.实现自定义接口CustomerRepositoryCustom
  * Created by fuwb on 16/8/10.
  */
-public class CustomerRepositoryImpl implements CustomerDaoCustom {
+public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
 
     @PersistenceContext
     private EntityManager em;

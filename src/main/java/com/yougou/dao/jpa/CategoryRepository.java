@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * 在 Repository 子接口中声明方法
  * 1. 不是随便声明的. 而需要符合一定的规范
- * 2. 查询方法以 find | read | get 开头
+ * 2. 查询方法以 find | findBy | read | readBy | get |getBy 开头
  * 3. 涉及条件查询时，条件的属性用条件关键字连接
  * 4. 要注意的是：条件属性以首字母大写。
  * 5. 支持属性的级联查询. 若当前类有符合条件的属性, 则优先使用, 而不使用级联属性.
@@ -51,11 +51,11 @@ public interface CategoryRepository extends BaseRepository<Category, Integer> {
     @Query("SELECT p FROM Category p WHERE p.id = (SELECT max(p2.id) FROM Category p2)")
     Category getMaxIdCategory();
 
-    //为 @Query 注解传递参数的方式1: 使用占位符.
+    //为 @Query 注解传递参数的方式1: 使用问号占位符.
     @Query("SELECT p FROM Category p WHERE p.categoryName = ?1 AND p.createdByUser = ?2")
     List<Category> testQueryAnnotationParams1(String categoryName, String createdByUser);
 
-    //为 @Query 注解传递参数的方式1: 命名参数的方式.
+    //为 @Query 注解传递参数的方式1: 使用名称占位符.
     @Query("SELECT p FROM Category p WHERE p.categoryName = :categoryName AND p.createdByUser = :createdByUser")
     List<Category> testQueryAnnotationParams2(@Param("createdByUser") String createdByUser, @Param("categoryName") String categoryName);
 
@@ -71,12 +71,23 @@ public interface CategoryRepository extends BaseRepository<Category, Integer> {
     @Query(value="SELECT count(id) FROM category", nativeQuery=true)
     long getTotalCount();
 
-    //可以通过自定义的 JPQL 完成 UPDATE 和 DELETE 操作. 注意: JPQL 不支持使用 INSERT
-    //在 @Query 注解中编写 JPQL 语句, 但必须使用 @Modifying 进行修饰. 以通知 SpringData, 这是一个 UPDATE 或 DELETE 操作
-    //UPDATE 或 DELETE 操作需要使用事务, 此时需要定义 Service 层. 在 Service 层的方法上添加事务操作.
-    //默认情况下, SpringData 的每个方法上有事务, 但都是一个只读事务. 他们不能完成修改操作!
+    // @Modifying 标示是更新操作(不含insert),返回影响的行数
+    // 可以通过自定义的 JPQL 完成 UPDATE 和 DELETE 操作. 注意: JPQL 不支持使用 INSERT
+    // 在 @Query 注解中编写 JPQL 语句, 但必须使用 @Modifying 进行修饰. 以通知 SpringData, 这是一个 UPDATE 或 DELETE 操作
+    // UPDATE 或 DELETE 操作需要使用事务, 此时需要定义 Service 层. 在 Service 层的方法上添加事务操作.
+    // 默认情况下, SpringData 的每个方法上有事务, 但都是一个只读事务. 他们不能完成修改操作!
     @Modifying
     @Query("UPDATE Category p SET p.categoryName = :categoryName WHERE id = :id")
-    void updateCategory(@Param("id") Integer id, @Param("categoryName") String categoryName);
+    int updateCategory(@Param("id") Integer id, @Param("categoryName") String categoryName);
 
+
+    /*
+    JpaRepository的查询功能
+    创建查询的顺序
+    Spring Data JPA 在为接口创建代理对象时，如果发现同时存在多种上述情况可用，它该优先采用哪种策略呢？
+    <jpa:repositories> 提供了 query-lookup-strategy 属性，用以指定查找的顺序。它有如下三个取值：
+    1：create-if-not-found：如果方法通过@Query指定了查询语句，则使用该语句实现查询；如果没有，则查找是否定义了符合条件的命名查询，如果找到，则使用该命名查询；如果两者都没有找到，则通过解析方法名字来创建查询。这是 query-lookup-strategy 属性的默认值
+    2：create：通过解析方法名字来创建查询。即使有符合的命名查询，或者方法通过 @Query指定的查询语句，都将会被忽略
+    3：use-declared-query：如果方法通过@Query指定了查询语句，则使用该语句实现查询；如果没有，则查找是否定义了符合条件的命名查询，如果找到，则使用该命名查询；如果两者都没有找到，则抛出异常
+    */
 }

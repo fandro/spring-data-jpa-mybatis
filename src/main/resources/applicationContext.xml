@@ -20,7 +20,9 @@
 	<context:annotation-config />
 
 	<!-- 使用annotation 自动注册bean -->
-	<context:component-scan base-package="com.yougou" />
+	<context:component-scan base-package="com.yougou" >
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
 
 	<!-- 开启自动切面代理 -->
 	<aop:aspectj-autoproxy />
